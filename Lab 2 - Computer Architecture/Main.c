@@ -8,12 +8,15 @@
 */
 
 #include "Loader.h"
+#include "Debugger.h"
 
 union Memory memory = { 0 };
 bool Error_Flag = FALSE;
 
 
 int main(int argc, char* argv[]) {
+
+
     char filename[FILENAME_SIZE];  // Buffer to store the filename
 
     // Check if a filename is provided as a command-line argument
@@ -42,14 +45,14 @@ int main(int argc, char* argv[]) {
         // Display the extracted filename and starting address
         printf("Source Filename: %s\n", file_name);
         printf("Starting Address: 0x%04X\n", Prog_Counter);
-        display_instruction();
-        Check_memmory();
+        find_instruction();
+        printf("-------------------------------------------------");
+        //Check_memmory();
     }
     else {
         printf("Possibally corrupted file Process Terminated");
     }
 
-    // Optional: Further processing or memory inspection can be done here
     (void)_getch();
     return 0;
 }
