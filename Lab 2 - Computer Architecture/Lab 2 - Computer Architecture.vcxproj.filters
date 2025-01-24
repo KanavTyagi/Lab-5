@@ -29,5 +29,8 @@
     <ClCompile Include="Loader_Function.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Fetch.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

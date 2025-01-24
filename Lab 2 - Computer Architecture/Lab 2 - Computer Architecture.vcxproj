@@ -131,6 +131,7 @@
     <ClInclude Include="Loader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Fetch.C" />
     <ClCompile Include="Loader_Function.c" />
     <ClCompile Include="Main.c" />
   </ItemGroup>
