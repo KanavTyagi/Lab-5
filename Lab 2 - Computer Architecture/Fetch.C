@@ -114,7 +114,7 @@ void find_instruction(void) {
 
 		switch (first3) {
 			case 0:
-				printf("first ones are \n");
+				execute_BL(instruction_read);
 				break;
 			case 1:
 				printf("Branch second\n");

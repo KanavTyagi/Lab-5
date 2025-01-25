@@ -32,5 +32,8 @@
     <ClCompile Include="Fetch.C">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="execute_Instruction.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

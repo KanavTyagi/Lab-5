@@ -5,8 +5,14 @@
 // Suppose bits are labeled as: [15..13] = top3, [12..10] = subOp, [9..0] = lower10
 // Adjust the shifts and masks to match your actual instruction format.
 #define GET_TOP3(x)    ( ((x) >> 13) & 0x7  )
-#define GET_SUBOP(x)   ( ((x) >> 10) & 0x7  )
-#define GET_LOWER10(x) (  (x)        & 0x3FF )
+#define GET_Byte_12_10(x)   ( ((x) >> 10) & 0x7  )
+#define GET_BYTE_9_8(x)   ( ((x) >> 8) & 0x3  )
+
+
+// This is the array that is going to be used to store the names of the 4
+// instructions and be used to look up the names of the instructions
+char* arthamatic[3][4] = { {"ADD" , "ADDC" ,"SUB", "SUBC"},  {"DADD", "CMP", "XOR", "AND"}, {"OR", "BIT", "BIC", "BIS"}};
+char* branch[8] = { "BEQ/BZ" , "BNE/BNZ" ,"BC/BHS", "BNC/BLO", "BN" , "BGE" ,"BLT", "BRA" };
 // These enum will help us keep track of eh states weather we are writing or reading 
 typedef enum {
     READING,
@@ -40,8 +46,11 @@ typedef union {
 } Instruction;
 
 
+
 // This function is going to be used to read and write instruction to the memory
 extern unsigned short bus(unsigned short mbr, unsigned short mar, Read_Or_Write R_OR_W, Word_Or_Byte W_O_B);
 extern void display_instruction(void);
 extern void decode_instruction(unsigned short instruction);
 extern void find_instruction(void); 
+extern void execute_BL(unsigned short instrction);
+extern char* get_opcode_name(unsigned char opcode);
