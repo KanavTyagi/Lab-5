@@ -114,24 +114,38 @@ void find_instruction(void) {
 
 		switch (first3) {
 			case 0:
-				execute_BL(instruction_read);
+				printf("BRANCHING LLLLL \n");
 				break;
 			case 1:
 				printf("Branch second\n");
+				DISPLAY_Branch(instruction_read);
 				break;
 			case 2:
-				printf("All thee add Instructions\n");
-				break;
+				if (GET_Byte_12_10(instruction_read) >= 2) {
+					printf("Invalid Instruction\n");
+					printf("%04X \n", memory.word[Prog_Counter / 2]);
+					break;
+				}
+				else
+				{
+					printf("All thee add Instructions\n");
+					DISPLAY_ARTH(instruction_read);
+					break;
+				}
+				
 			case 3:
 				printf("Move instructions \n");
+				printf("%04X \n", memory.word[Prog_Counter / 2]);
 				break;
 			case 4:
 			case 5:
 				printf("LDR \n");
+				printf("%04X \n", memory.word[Prog_Counter / 2]);
 				break;
 			case 6:
 			case 7:
 				printf("STR \n");
+				printf("%04X \n", memory.word[Prog_Counter / 2]);
 				break;
 			default:
 				printf("Shit is fucked gove up on life \n");
