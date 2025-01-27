@@ -4,6 +4,8 @@
 
 // Turn on ad off diagnostics
 #define DEBUG
+
+
 char* arthamatic[3][4] = { {"ADD" , "ADDC" ,"SUB", "SUBC"},  {"DADD", "CMP", "XOR", "AND"}, {"OR", "BIT", "BIC", "BIS"} };
 char* branch[8] = { "BEQ/BZ" , "BNE/BNZ" ,"BC/BHS", "BNC/BLO", "BN" , "BGE" ,"BLT", "BRA" };
 unsigned short  Register_file[2][8] = { {0xF0A0, 0xF0A1, 0xF0A2, 0xF0A3, 0xF0A4, 0xF0A5, 0xF0A6, 0xF0A7}, {0x0000, 0x0001 ,0x0002 , 0x0004, 0x0008, 0x0010, 0x0020, 0xFFFF } };

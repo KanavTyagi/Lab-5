@@ -19,8 +19,8 @@
 #define CHECK_SUM_SIZE 1  //  Size of Check Sum in Bytes
 #define DATA_INDEX 8 // "S" + "1" + length(2) + address (4) = 8th index is where we want to start reading from
 #define Hex_Char_Per_Byte 2		// Number of characters in 1 hex digit of size 1 byte
-#define TRUE 1
-#define FALSE 0
+#define TRUE 1 // Used to set the flag to true
+#define FALSE 0 // Used to set the flag to false
 #define Buffer_size 1024     // Buffer size to read the records from the file
 #define CHECK_VALIDATE 0xFF //  Used to validate the check sum by Anding it to the sum of all 
 #define S_INDEX 0		   // Index offset for gettting to the 1st Location in the memory
@@ -30,16 +30,17 @@
 
 
 extern bool Error_Flag; // Flag to be raised whenever an error has occured 
-// Memory Array
+// Memory Array to store the data and instructions
 union Memory {
 	unsigned short word[MEMSIZE >> 1];
 	unsigned char byte[MEMSIZE];
 };
 
+// Global Variable to srtoe the memory array
 extern union Memory memory; // Memmory array where data and instructions will be saved 
 
 
-// Global Variables
+// Global Variable to store the file name and the starting address
 extern char file_name[FILENAME_SIZE]; // To read the file name from the S0 Record 
 extern unsigned short Prog_Counter; // To read the position of the Program counter
 
