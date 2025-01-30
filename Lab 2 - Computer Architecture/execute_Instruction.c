@@ -64,6 +64,7 @@ void DISPLAY_Branch(unsigned short instruction) {
 
 	// Shift left as the machine code is shifted right by 1 bit (bit 0 is always 0) 
 	offset <<= 1;
+	printf("Instruction: %s\n", branch[GET_BITS_12_10(instruction)]);
 	printf("Encoded Offset: %0X\n", (unsigned short)offset);
 
 	signed int New_PC = Prog_Counter + offset; // Use wider type for PC calculation

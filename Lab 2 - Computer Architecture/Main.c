@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
         // Display the extracted filename and starting address
         printf("Source Filename: %s\n", file_name);
         printf("Starting Address: 0x%04X\n", Prog_Counter);
-        find_instruction();
+        instruction_menue();
         printf("-------------------------------------------------");
         //Check_memmory();
     }

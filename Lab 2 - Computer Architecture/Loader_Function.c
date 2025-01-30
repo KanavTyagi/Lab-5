@@ -104,35 +104,20 @@ void read_file(FILE* file_pointer)
 
 
 // This flunction will be called to check that elemnts are added properly
-void Check_memmory(void) {
+// Function to display memory
+void display_memory() {
+    unsigned short Start, End;
+    char W_or_B;
 
-    char conti = 'Y'; // Would be used to keep the while loop going untill the user wants to exit
-    while (conti == 'Y' || conti == 'y') { // Keep going untill user specifies 
+    printf("Enter the starting and ending address in hex: ");
+    scanf("%hx %hx", &Start, &End);
+    getchar(); // Clear input buffer
 
+    printf("Do you want the data in Word (w) or Byte (b)? ");
+    scanf(" %c", &W_or_B);
+    getchar(); // Clear input buffer
 
-        // Making it a short as we only need the address which would be of size 2 byte
-        unsigned short Start = 0, End = 0;
-
-        printf("Enter the starting and the endind address in hex : \n"); // Asking the user for the start and end memory location
-
-        scanf("%hx %hx", &Start, &End); // Saving the user response 
-        getchar();// Clearing the input buffer as scanf leaves a new line character in the buffer
-#ifdef DEBUG
-        printf("Hex vals read : S : %02x E: %02x , Int values: %hd , %hd\n", Start, End, Start, End);
-#endif
-        char W_or_B = 0; // Variable to help specifies weather the user wants to display the data as bytes or word 
-        printf("Do you want the data inn Word(w) or Byte(b) : ");
-        scanf("%c", &W_or_B);
-        getchar();// Clearing the input buffer as scanf leaves a new line character in the buffer
-
-        // Calling the function to display 
-        print_memory(Start, End, W_or_B);
-
-        printf("Do you want to continue Y/N : ");
-        conti = getchar(); // Reading the user input
-
-    }
-
+    print_memory(Start, End, W_or_B);
 }
 
 

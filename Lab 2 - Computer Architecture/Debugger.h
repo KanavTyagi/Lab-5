@@ -62,9 +62,12 @@ typedef union {
 
 // This function is going to be used to read and write instruction to the memory
 extern void bus(unsigned short mar, unsigned short* mbr, Read_Or_Write R_OR_W, Word_Or_Byte W_O_B);
-extern void display_instruction(void);
-extern void decode_instruction(unsigned short instruction);
-extern void find_instruction(void);  // This function is going to be used to find the instruction
+extern unsigned short fetch_instruction();
+extern void decode_instruction(unsigned short instruction_read);
+extern void read_next_instruction();
+extern void input_custom_instruction();
+extern void change_program_counter();
+extern void instruction_menue(void);  // This function is going to be used to give the user the menue 
 extern void DISPLAY_Branch(unsigned short instruction); // This function is going to be used to display the branch instructions
 extern void DISPLAY_ARTH(unsigned short instruction); // This function is going to be used to display the Arthametic and logical instructions
 extern void DISPLAY_BL(unsigned short instruction); // This function is going to be used to display the Load instructions

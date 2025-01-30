@@ -58,5 +58,5 @@ extern void parse_S9(const char* buffer, unsigned int byte_count, unsigned int a
 extern bool Validate_CheckSum(const char* buffer); // Validates the S Record by checking the check Sum
 
 // Functions to Writee the contents of the memory
-extern void Check_memmory(void); // asks the user which of the memory they want to display adn how 
+extern void display_memory(void); // asks the user which of the memory they want to display adn how 
 extern void print_memory(const short start, const short end, char w_or_b); // Displays the memory contents between the start and end positions in either word format or byte format
