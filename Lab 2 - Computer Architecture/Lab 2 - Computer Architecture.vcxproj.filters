@@ -35,5 +35,8 @@
     <ClCompile Include="execute_Instruction.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="suplementry_function.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

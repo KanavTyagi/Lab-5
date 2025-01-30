@@ -5,7 +5,7 @@
 //#define DEBUG
 
 // To test the instruction output uncomment the line to be able to test the output of the instructions
-#define TESTING
+//#define TESTING
 
 // This function is going to be used to read and write instruction to the memory
 // When Fetching instructions 
@@ -13,81 +13,53 @@
 // mbr gets the data from the memory location at mar which is the Program Counter 
 // can access it in word or byte
 // When reading n
-unsigned short bus(unsigned short mbr, unsigned short mar, Read_Or_Write R_OR_W, Word_Or_Byte W_O_B) {
+void bus(unsigned short mar, unsigned short* mbr, Read_Or_Write R_OR_W, Word_Or_Byte W_O_B) {
 
-	// First thing we need to know is weather to read or write 
-
+	// Check if we are reading or writing
 	if (R_OR_W == READING) {
-		// If we are reading then need to know weather we are reading word or byte 
+		// If we are reading, check whether it's a word or a byte
 		if (W_O_B == WORD) {
-			// Gettig the instruction from the memory
-			mbr = memory.word[mar >> 1]; 
+			// Read a word from memory
+			*mbr = memory.word[mar >> 1];
 #ifdef DEBUG
-			printf("Read Word from Memory at address 0x%04X: 0x%04X\n", mar, mbr);
+			printf("Read Word from Memory at address 0x%04X: 0x%04X\n", mar, *mbr);
 #endif
-			// Return the instruction set that is read from teh memory in word form 
-			return mbr;
+			
 		}
 		else if (W_O_B == BYTE) {
-			mbr = memory.byte[mar];
-			mbr = mbr & 0x00FF; // making sure we clare the upper bits 
+			// Read a byte from memory
+			*mbr = memory.byte[mar] & 0x00FF; // Ensure only the lower byte is kept
 #ifdef DEBUG
-			printf("Read Byte from Memory at address 0x%04X: 0x%02X\n", mar, mbr);
+			printf("Read Byte from Memory at address 0x%04X: 0x%02X\n", mar, *mbr);
 #endif
-
-			// Return the instruction set that is read from teh memory in byte form 
-			return mbr; 
-		}
-
-		else if (R_OR_W == WRITING) {
 			
-			if (W_O_B == WORD) {
-
-				memory.word[mar >> 1] = mbr;
-#ifdef DEBUG
-				printf("Wrote Word to Memory at address 0x%04X: 0x%04X\n", mar, mbr);
-#endif
-				mar = mar + 2; 
-				// Return the updated program counter would be 
-				return mar;
-				
-			}
-			else if (W_O_B == BYTE) {
-
-				memory.word[mar] = mbr & 0x00FF;
-#ifdef DEBUG
-				printf("Wrote Byte to Memory at address 0x%04X: 0x%02X\n", mar, mbr);
-#endif
-				mar = mar + 1; 
-				// Return the updated program counter would be 
-				return memory.word[mar];
-
-			}
 		}
-		
-
-
-
 	}
+	else if (R_OR_W == WRITING) {
+		// If we are writing, check whether it's a word or a byte
+		if (W_O_B == WORD) {
+			// Write a word to memory
+			memory.word[mar >> 1] = *mbr;
+#ifdef DEBUG
+			printf("Wrote Word to Memory at address 0x%04X: 0x%04X\n", mar, *mbr);
+#endif
+			
+		}
+		else if (W_O_B == BYTE) {
+			// Write a byte to memory
+			memory.byte[mar] = *mbr & 0x00FF; // Store only lower 8 bits
+#ifdef DEBUG
+			printf("Wrote Byte to Memory at address 0x%04X: 0x%02X\n", mar, *mbr);
+#endif
+			
+		}
+	}
+
+	
 }
 
 
 
-void display_instruction(void) {
-
-	int i = 0; 
-	while (i < 5) {
-		unsigned short instruction_read = 0;
-
-		instruction_read = bus(instruction_read, Prog_Counter, READING, WORD);
-
-		printf("%04X \n", instruction_read);
-
-		Prog_Counter++; 
-		i++;
-	}
-
-}
 
 
 // This function would need to decode the instructions that are passed into thiss 
@@ -103,6 +75,7 @@ void decode_instruction(unsigned short instruction) {
 void find_instruction(void) {
 
 	char conti = 'y';
+	char update_PC = 'y';
 	
 	printf("\start reading : ");
 	conti = getchar();
@@ -111,7 +84,12 @@ void find_instruction(void) {
 	while (conti == 'y' || conti == 'Y') {
 		unsigned short instruction_read = 0;
 
-		instruction_read = bus(instruction_read, Prog_Counter, READING, WORD);
+		// Reading the instruction from the memory
+		// So we would set the value of mar to the program counter
+		mar = Prog_Counter;
+		bus(mar, &mbr, READING, WORD);
+		instruction_read = mbr; // Getting the instruction from the memory buffer register
+		printf("Instruction read 0x%04X \n", instruction_read);
 
 		//////////////////////////////////////////////////////////////////////////////////
 #ifdef TESTING
@@ -172,21 +150,20 @@ void find_instruction(void) {
 				DISPLAY_Branch(instruction_read);
 				break;
 			case 2:
-				if (GET_Byte_12_10(instruction_read) >= 2) {
+				if (GET_BITS_12_10(instruction_read) >= 2) {
 					printf("Invalid Instruction\n");
-					printf("%04X \n", memory.word[Prog_Counter / 2]);
+					printf("0x%04X \n", memory.word[Prog_Counter / 2]);
 					break;
 				}
 				else
 				{
-					printf("All thee add Instructions\n");
 					DISPLAY_ARTH(instruction_read);
 					break;
 				}
 
 			case 3:
 				printf("Move instructions \n");
-				printf("%04X \n", memory.word[Prog_Counter / 2]);
+				printf("0x%04X \n", memory.word[Prog_Counter / 2]);
 				break;
 			case 4:
 			case 5:
@@ -205,7 +182,18 @@ void find_instruction(void) {
 			}
 			printf("Continue reading (y/n)?: ");
 			scanf(" %c", &conti);
-			Prog_Counter += 2;
+			getchar(); // Gets rid of the newline in the buffer
+
+			printf("Do you want to update Program Counter (Y/N): ");
+			update_PC = getchar();
+
+			if (update_PC == 'y' || update_PC == 'Y') {
+				UPDATE_PC();					
+			}
+			else {
+				Prog_Counter += 2;
+			}
+			
 
 		}
 		

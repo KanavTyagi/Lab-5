@@ -12,7 +12,8 @@
 
 union Memory memory = { -1 };
 bool Error_Flag = FALSE;
-
+unsigned short mbr = 0; // This is the memory buffer register that is going to be used to store the data that is going to be read from the memory
+unsigned short mar = 0;
 
 int main(int argc, char* argv[]) {
 
