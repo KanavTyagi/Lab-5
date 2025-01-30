@@ -10,7 +10,7 @@
 #include "Loader.h"
 #include "Debugger.h"
 
-union Memory memory = { 0 };
+union Memory memory = { -1 };
 bool Error_Flag = FALSE;
 
 

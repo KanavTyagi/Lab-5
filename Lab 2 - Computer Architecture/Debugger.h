@@ -54,5 +54,6 @@ extern unsigned short bus(unsigned short mbr, unsigned short mar, Read_Or_Write 
 extern void display_instruction(void);
 extern void decode_instruction(unsigned short instruction);
 extern void find_instruction(void);  // This function is going to be used to find the instruction
-extern void DISPLAY_Branch(unsigned short instrction); // This function is going to be used to display the branch instructions
-extern void DISPLAY_ARTH(unsigned short instrction); // This function is going to be used to display the Arthametic and logical instructions
+extern void DISPLAY_Branch(unsigned short instruction); // This function is going to be used to display the branch instructions
+extern void DISPLAY_ARTH(unsigned short instruction); // This function is going to be used to display the Arthametic and logical instructions
+extern void DISPLAY_BL(unsigned short instruction); // This function is going to be used to display the Load instructions

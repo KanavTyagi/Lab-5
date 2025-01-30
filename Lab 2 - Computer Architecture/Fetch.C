@@ -1,8 +1,11 @@
 #include "Loader.h"
 #include "Debugger.h"
 
-// Turn on ad off diagnostics 
-#define DEBUG
+// Turn on and off diagnostics 
+//#define DEBUG
+
+// To test the instruction output uncomment the line to be able to test the output of the instructions
+#define TESTING
 
 // This function is going to be used to read and write instruction to the memory
 // When Fetching instructions 
@@ -103,21 +106,69 @@ void find_instruction(void) {
 	
 	printf("\start reading : ");
 	conti = getchar();
-	
+
+	char test;
 	while (conti == 'y' || conti == 'Y') {
 		unsigned short instruction_read = 0;
 
 		instruction_read = bus(instruction_read, Prog_Counter, READING, WORD);
 
-		// Need to check if something does exist there or not if it is 0 then move to the next 
-		unsigned first3 = GET_TOP3(instruction_read);
+		//////////////////////////////////////////////////////////////////////////////////
+#ifdef TESTING
 
-		switch (first3) {
+		char input[10];       // Buffer to store user input
+
+		// Prompt the user for hexadecimal input
+		printf("Enter testing data in hexadecimal (e.g., 1A3F or 0x1A3F): ");
+
+		// Read the input as a string
+		if (scanf("%9s", input) != 1) {  // Limit input to prevent buffer overflow
+			fprintf(stderr, "Error reading input.\n");
+			return 1;
+		}
+
+		// Optional: Remove "0x" or "0X" prefix if present
+		char* hexStr = input;
+		if (strlen(input) > 2 && input[0] == '0' && (input[1] == 'x' || input[1] == 'X')) {
+			hexStr += 2;
+		}
+
+		// Check if all characters are valid hexadecimal digits
+		for (size_t i = 0; i < strlen(hexStr); i++) {
+			if (!isxdigit((unsigned char)hexStr[i])) {
+				fprintf(stderr, "Invalid hexadecimal input.\n");
+				return 1;
+			}
+		}
+
+		// Use sscanf to parse the hexadecimal string
+		int sscanfResult = sscanf(hexStr, "%hx", &instruction_read);
+		if (sscanfResult != 1) {
+			fprintf(stderr, "Failed to parse hexadecimal input.\n");
+			return 1;
+		}
+
+		// Display the stored value
+		printf("Stored data as unsigned short: %u (decimal) or 0x%04X (hexadecimal)\n", instruction_read, instruction_read);
+#endif
+		//////////////////////////////////////////////////////////////////////////////////
+
+		// Need to check if something does exist there or not if it is 0 then move out of the loop 
+		// Just for the porpose of the lab 2 
+		if (instruction_read == 0 || instruction_read == -1) {
+			printf("End of the program\n");
+			conti = 'n';
+		}
+		else {
+			unsigned first3 = GET_TOP3(instruction_read);
+
+			switch (first3) {
 			case 0:
-				printf("BRANCHING LLLLL \n");
+				// This is the branch with link instruction
+				DISPLAY_BL(instruction_read);
 				break;
 			case 1:
-				printf("Branch second\n");
+				//printf("Branch second\n");
 				DISPLAY_Branch(instruction_read);
 				break;
 			case 2:
@@ -132,7 +183,7 @@ void find_instruction(void) {
 					DISPLAY_ARTH(instruction_read);
 					break;
 				}
-				
+
 			case 3:
 				printf("Move instructions \n");
 				printf("%04X \n", memory.word[Prog_Counter / 2]);
@@ -151,10 +202,14 @@ void find_instruction(void) {
 				printf("Shit is fucked gove up on life \n");
 				break;
 
+			}
+			printf("Continue reading (y/n)?: ");
+			scanf(" %c", &conti);
+			Prog_Counter += 2;
+
 		}
-		printf("Continue reading (y/n)?: ");
-		scanf(" %c", &conti);  
-		Prog_Counter += 2;
+		
+		
 	}
 
 }
