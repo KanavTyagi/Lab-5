@@ -1,5 +1,15 @@
 
-// SRead.h
+/*
+ * File Name: Loader.h
+ * Created: 19th January 2025
+ * By: Kanav Tyagi
+ *
+ * Description:
+ * This header file defines structures and unions for memory handling, 
+ * and declares external variables and functions
+ * related to reading the srecords validating them
+ * ann writing the contents of the memory
+ */
 #pragma once
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -43,6 +53,7 @@ extern union Memory memory; // Memmory array where data and instructions will be
 // Global Variable to store the file name and the starting address
 extern char file_name[FILENAME_SIZE]; // To read the file name from the S0 Record 
 extern unsigned short Prog_Counter; // To read the position of the Program counter
+extern unsigned short starting_address; // To read the starting address of the program
 
 // Functions to read file 
 extern FILE* file_open(const char* name_file); // Function to open he file passed by either drag adn drop or typed in

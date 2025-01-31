@@ -1,5 +1,24 @@
+/*
+ * File Name: fetch.c
+ * Created: 29th January 2025
+ * By: Kanav Tyagi
+ *
+ * Contains functions responsible for managing memory access operations, fetching and decoding instructions,
+ * and handling user interactions through a menu interface.
+ *
+ * bus: Handles reading from and writing to memory based on the specified parameters and uses the memory buffer register and memory address register.
+ * fetch_instruction: Retrieves the next instruction from memory using the program counter.
+ * decode_instruction: Decodes an instruction passed to it and calls the corresponding function to execute the operation.
+ * instruction_menu: Presents a menu to the user for interacting with the memory and instructions. 
+ *
+ * DEBUG: When enabled, provides detailed diagnostic logs for memory operations and instruction handling.
+ * TESTING: When enabled, allows for testing the output of instructions. (functionality removed and move to the menue as an option for user to add a custom instruction)
+ *
+ */
+
+
 #include "Loader.h"
-#include "Debugger.h"
+#include "Decode.h"
 
 // Turn on and off diagnostics 
 //#define DEBUG
@@ -9,10 +28,9 @@
 
 // This function is going to be used to read and write instruction to the memory
 // When Fetching instructions 
-// mar gets PC
+// mar gets the current PC
 // mbr gets the data from the memory location at mar which is the Program Counter 
 // can access it in word or byte
-// When reading n
 void bus(unsigned short mar, unsigned short* mbr, Read_Or_Write R_OR_W, Word_Or_Byte W_O_B) {
 
 	// Check if we are reading or writing
@@ -59,98 +77,84 @@ void bus(unsigned short mar, unsigned short* mbr, Read_Or_Write R_OR_W, Word_Or_
 }
 
 
-
-
-
-// This function would need to decode the instructions that are passed into thiss 
-// this would basically read the instruction and then display the contents in the specifed foramt 
-// 
-//void decode_instruction(unsigned short instruction) {
-//
-//}
-
-
-
 // Function to fetch an instruction from memory using the bus function
-unsigned short fetch_instruction() {
-	unsigned short instruction_read = 0; // Initialize to 0 
+// As we are fetching instructions we would be reading from the memory 
+// The instruction is 2 bytes long so we would read a word from the memory
+void fetch_instruction(void) {
 
-    // Read instruction from memory
+    // To Read instruction from memory we would use the bus 
 	mar = Prog_Counter; // Set the memory address register to the program counter
-	bus(mar, &mbr, READING, WORD); // Read a word from memory
-	instruction_read = mbr; // Get the instruction that is stored in the memory buffer register
+	bus(mar, &mbr, READING, WORD); // Read a word from memory as the instructions are 2 bytes long 
+    Instruction_Register = mbr; // Get the instruction that is stored in the memory buffer register
+
+    if (Prog_Counter >= Max_PC) { // If the program counter is at the end of the memory then the program has ended
+        printf("End of program.\n");
+
+    }
+    else {
+        Prog_Counter += Prog_Step;  // Increment program counter by 2 here as this is where we would have read an instruction from the memory 
+        // and would need to update the program counter to the next instruction
+        // this is going to be for just  the purpose of the lab 2 
+        // for the next tasks change this
+    }
+
+
+    validate_PC(Prog_Counter); // Validate the program counter after updating it
 	
-	return instruction_read; // Return the instruction that is read from the memory
+	// Returns the instruction that is read from the memory	return instruction_read; // Return the instruction that is read from the memory
 }
 
 // Function to decode an instruction
-// This function will take an instruction as input and decode it
-// The instruction passed can be from the memory or a custom instruction
-void decode_instruction(unsigned short instruction_read) {
+// This function will take an instruction as input and decode it 
+// The instruction passed can be from the memory or a custom instruction that has been entered by the user
+void decode_instruction(void) {
 
-	unsigned first3 = GET_TOP3(instruction_read); // Get the top 3 bits of the instruction to decode the first step
+    // Get the top 3 bits of the instruction to decode the first step
+	unsigned first3 = GET_TOP3(Instruction_Register);
     
 	// Decode the instruction based on the first 3 bits
     switch (first3) {
     
 	case 0: // Branch with link instruction is the only instruction in this group
-        DISPLAY_BL(instruction_read);
+        DISPLAY_BL();
         break;
 
 	case 1: // Branch instructions other the branch with link
-        DISPLAY_Branch(instruction_read);
+        DISPLAY_Branch();
         break;
 
 	case 2: // Arthametic and logical instructions group
         // And for the instruction that would need to be decoded in this lab 
 		// any with the next 3 bit being more than 2 would be invalid
-        if (GET_BITS_12_10(instruction_read) >= 2) {
+        if (GET_BITS_12_10(Instruction_Register) >= 2) {
             printf("Invalid Instruction\n");
-            printf("0x%04X\n", instruction_read); // Display the instruction that is read from the memory
+            printf("0x%04X\n", Instruction_Register); // Display the instruction that is read from the memory
             break;
         }
-        else {
-            DISPLAY_ARTH(instruction_read);
+		else { //  If the instruction is valid then decode it
+            DISPLAY_ARTH();
             break;
         }
-    case 3:
-        printf("Move instruction: 0x%04X\n", instruction_read);
+	case 3: // These would be the move instructions and we would not be needed to decode in this lab 
+		    // so we would just display the instruction
+        printf("Move instruction: 0x%04X\n", Instruction_Register);
         break;
-    case 4:
-    case 5:
-        printf("LDR: 0x%04X\n", instruction_read);
+	case 4: // These both would be the load instructions and we would not be needed to decode in this lab 
+    case 5: // so we would just display the instruction
+        printf("LDR: 0x%04X\n", Instruction_Register);
         break;
-    case 6:
-    case 7:
-        printf("STR: 0x%04X\n", instruction_read);
+	case 6: // These both would be the store instructions and we would not be needed to decode in this lab
+	case 7: // so we would just display the instruction
+        printf("STR: 0x%04X\n", Instruction_Register);
         break;
-    default:
+	default: // If the instruction is not in the above groups then it is invalid for our use case 
         printf("Unknown instruction.\n");
-		printf("0x%04X\n", instruction_read); // Display the instruction that is read from the memory
+		printf("0x%04X\n", Instruction_Register); // Display the instruction that is read from the memory
         break;
     }
 }
 
 
-// Function to read the next instruction from memory and decode it
-void read_next_instruction() {
-
-	//Prog_Counter += 2; // updatins the program counter to the read the next instructions
-    unsigned short instruction_read = fetch_instruction();
-    printf("Instruction read: 0x%04X \n", instruction_read);
-
-    // Check for end of program
-    if (instruction_read == 0 || instruction_read == (unsigned short)-1) {
-        printf("End of program.\n");
-        return;
-    }
-
-    decode_instruction(instruction_read);
-	Prog_Counter += 2;  // Increment program counter by 2 here as this is where we would have read an instruction from the memory 
-	// and would need to update the program counter to the next instruction
-	// this is going to be for just  the purpose of the lab 2 
-    // for the next change this 
-}
 
 
 
@@ -161,7 +165,9 @@ void read_next_instruction() {
 // then according to the users choice the appropriate function would be called
 void instruction_menue(void) {
 	char choice; // User choice
-	int continue_program = 1;  // Control flag to make sure we can exit the loop
+	int continue_program = TRUE;  // Control flag to make sure we can exit the loop
+                                  // Would need to be updated in the next tasks 
+								  // Implement the Ctrl + C to exit the program
 
     while (continue_program) {
         // Display Menu
@@ -199,7 +205,7 @@ void instruction_menue(void) {
 
 		case '5': // Exit program
             printf("Exiting...\n");
-            continue_program = 0;  // Exit loop
+            continue_program = FALSE;  // Exit loop
             break;
         default:
             printf("Invalid choice. Please enter a number between 1 and 5.\n");
@@ -210,136 +216,3 @@ void instruction_menue(void) {
 
 
 
-
-////////////////////////////////////////////////////////////////////
-// this function is going to read teh instruction from the memory and then
-// Will call the function to decode it 
-//void find_instruction(void) {
-//
-//	char conti = 'y';
-//	char update_PC = 'y';
-//	
-//	printf("\start reading : ");
-//	conti = getchar();
-//
-//	char test;
-//	while (conti == 'y' || conti == 'Y') {
-//		unsigned short instruction_read = 0;
-//
-//		// Reading the instruction from the memory
-//		// So we would set the value of mar to the program counter
-//		mar = Prog_Counter;
-//		bus(mar, &mbr, READING, WORD);
-//		instruction_read = mbr; // Getting the instruction from the memory buffer register
-//		printf("Instruction read 0x%04X \n", instruction_read);
-//
-//		//////////////////////////////////////////////////////////////////////////////////
-//#ifdef TESTING
-//
-//		char input[10];       // Buffer to store user input
-//
-//		// Prompt the user for hexadecimal input
-//		printf("Enter testing data in hexadecimal (e.g., 1A3F or 0x1A3F): ");
-//
-//		// Read the input as a string
-//		if (scanf("%9s", input) != 1) {  // Limit input to prevent buffer overflow
-//			fprintf(stderr, "Error reading input.\n");
-//			return 1;
-//		}
-//
-//		// Optional: Remove "0x" or "0X" prefix if present
-//		char* hexStr = input;
-//		if (strlen(input) > 2 && input[0] == '0' && (input[1] == 'x' || input[1] == 'X')) {
-//			hexStr += 2;
-//		}
-//
-//		// Check if all characters are valid hexadecimal digits
-//		for (size_t i = 0; i < strlen(hexStr); i++) {
-//			if (!isxdigit((unsigned char)hexStr[i])) {
-//				fprintf(stderr, "Invalid hexadecimal input.\n");
-//				return 1;
-//			}
-//		}
-//
-//		// Use sscanf to parse the hexadecimal string
-//		int sscanfResult = sscanf(hexStr, "%hx", &instruction_read);
-//		if (sscanfResult != 1) {
-//			fprintf(stderr, "Failed to parse hexadecimal input.\n");
-//			return 1;
-//		}
-//
-//		// Display the stored value
-//		printf("Stored data as unsigned short: %u (decimal) or 0x%04X (hexadecimal)\n", instruction_read, instruction_read);
-//#endif
-//		//////////////////////////////////////////////////////////////////////////////////
-//
-//		// Need to check if something does exist there or not if it is 0 then move out of the loop 
-//		// Just for the porpose of the lab 2 
-//		if (instruction_read == 0 || instruction_read == -1) {
-//			printf("End of the program\n");
-//			conti = 'n';
-//		}
-//		else {
-//			unsigned first3 = GET_TOP3(instruction_read);
-//
-//			switch (first3) {
-//			case 0:
-//				// This is the branch with link instruction
-//				DISPLAY_BL(instruction_read);
-//				break;
-//			case 1:
-//				//printf("Branch second\n");
-//				DISPLAY_Branch(instruction_read);
-//				break;
-//			case 2:
-//				if (GET_BITS_12_10(instruction_read) >= 2) {
-//					printf("Invalid Instruction\n");
-//					printf("0x%04X \n", memory.word[Prog_Counter / 2]);
-//					break;
-//				}
-//				else
-//				{
-//					DISPLAY_ARTH(instruction_read);
-//					break;
-//				}
-//
-//			case 3:
-//				printf("Move instructions \n");
-//				printf("0x%04X \n", memory.word[Prog_Counter / 2]);
-//				break;
-//			case 4:
-//			case 5:
-//				printf("LDR \n");
-//				printf("%04X \n", memory.word[Prog_Counter / 2]);
-//				break;
-//			case 6:
-//			case 7:
-//				printf("STR \n");
-//				printf("%04X \n", memory.word[Prog_Counter / 2]);
-//				break;
-//			default:
-//				printf("Shit is fucked gove up on life \n");
-//				break;
-//
-//			}
-//			printf("Continue reading (y/n)?: ");
-//			scanf(" %c", &conti);
-//			getchar(); // Gets rid of the newline in the buffer
-//
-//			printf("Do you want to update Program Counter (Y/N): ");
-//			update_PC = getchar();
-//
-//			if (update_PC == 'y' || update_PC == 'Y') {
-//				UPDATE_PC();					
-//			}
-//			else {
-//				Prog_Counter += 2;
-//			}
-//			
-//
-//		}
-//		
-//		
-//	}
-//
-//}

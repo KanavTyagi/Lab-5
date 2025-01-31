@@ -4,16 +4,19 @@
 * Created : 19th January 2025
 * By: Kanav Tyagi
 * Contains the main entry point to the code
-* and teh defination of global variables
+* and the various global variables would be initialized here 
 */
 
 #include "Loader.h"
-#include "Debugger.h"
+#include "Decode.h"
 
-union Memory memory = { -1 };
-bool Error_Flag = FALSE;
-unsigned short mbr = 0; // This is the memory buffer register that is going to be used to store the data that is going to be read from the memory
-unsigned short mar = 0;
+union Memory memory = { Initilizer }; // Initialize the memory to 0 as there cant be an instruction 0x0000 (can be but doesnt make sense to have a bracnh with offset 0)
+bool Error_Flag = FALSE; // This flag is going to be used to check if there is an error in the file that is being processed
+unsigned short mbr = Initilizer; // This is the memory buffer register that is going to be used to store the data that is going to be read from the memory
+unsigned short mar = Initilizer; // This is the memory address register that is going to be used to store the address that is going to be read from the memory
+unsigned short starting_address = Initilizer; // This is the starting address of the program
+unsigned short Instruction_Register = Initilizer;
+
 
 int main(int argc, char* argv[]) {
 
@@ -51,10 +54,10 @@ int main(int argc, char* argv[]) {
         //Check_memmory();
     }
     else {
-        printf("Possibally corrupted file Process Terminated");
+        printf("\nPossibally corrupted file Process Terminated\n");
     }
 
     (void)_getch();
-    return 0;
+    return false;
 }
 

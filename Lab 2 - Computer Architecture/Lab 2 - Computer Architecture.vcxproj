@@ -127,13 +127,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Debugger.h" />
+    <ClInclude Include="Decode.h" />
     <ClInclude Include="Loader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="execute_Instruction.c" />
     <ClCompile Include="Fetch.C" />
-    <ClCompile Include="Loader_Function.c" />
+    <ClCompile Include="Memory_Display_functions.c" />
+    <ClCompile Include="file_operation.c" />
+    <ClCompile Include="Reading_Srecords.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="suplementry_function.c" />
   </ItemGroup>

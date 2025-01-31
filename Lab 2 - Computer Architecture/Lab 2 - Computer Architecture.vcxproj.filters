@@ -18,7 +18,7 @@
     <ClInclude Include="Loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Debugger.h">
+    <ClInclude Include="Decode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,7 +26,7 @@
     <ClCompile Include="Main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Loader_Function.c">
+    <ClCompile Include="Reading_Srecords.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Fetch.C">
@@ -36,6 +36,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="suplementry_function.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="file_operation.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory_Display_functions.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
