@@ -17,7 +17,7 @@
 #define GET_BIT(value, n)  ( ((value) >> (n)) & 0x1 ) // this can get the specified bit from the value
 #define GET_BITS_5_3(x)   ( ((x) >> 3) & 0x7  ) // this can get the 5th to 3rd bit from the value
 #define GET_BITS_2_0(x)   ( ((x) >> 0) & 0x7  ) // this can get the 2nd to 0th bit from the value
-
+#define test 12000 // this to test if git is working 
 
 
 #define R_C_BIT 7 // This is the bit that is going to be used to get the R/C bit
