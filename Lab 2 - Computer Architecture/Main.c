@@ -15,7 +15,7 @@ bool Error_Flag = FALSE; // This flag is going to be used to check if there is a
 unsigned short mbr = Initilizer; // This is the memory buffer register that is going to be used to store the data that is going to be read from the memory
 unsigned short mar = Initilizer; // This is the memory address register that is going to be used to store the address that is going to be read from the memory
 unsigned short starting_address = Initilizer; // This is the starting address of the program
-unsigned short Instruction_Register = Initilizer;
+unsigned short Instruction_Register = Initilizer; // This is the instruction register that is going to be used to store the instruction that is going to be read from the memory
 
 
 int main(int argc, char* argv[]) {

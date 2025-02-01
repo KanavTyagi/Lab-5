@@ -86,16 +86,16 @@ void fetch_instruction(void) {
 	mar = Prog_Counter; // Set the memory address register to the program counter
 	bus(mar, &mbr, READING, WORD); // Read a word from memory as the instructions are 2 bytes long 
     Instruction_Register = mbr; // Get the instruction that is stored in the memory buffer register
-
-    if (Prog_Counter >= Max_PC) { // If the program counter is at the end of the memory then the program has ended
-        printf("End of program.\n");
-
-    }
-    else {
+    validate_PC(Prog_Counter);
+    if (Prog_Counter < Max_PC) { // If the program counter is at the end of the memory then the program has ended
         Prog_Counter += Prog_Step;  // Increment program counter by 2 here as this is where we would have read an instruction from the memory 
         // and would need to update the program counter to the next instruction
         // this is going to be for just  the purpose of the lab 2 
         // for the next tasks change this
+
+    }
+    else {
+        
     }
 
 

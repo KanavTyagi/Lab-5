@@ -118,7 +118,7 @@ void read_next_instruction() {
 		printf("End of program.\n"); // Display the end of the program
 
     }
-    else {
+    if (1) {
 		printf("Instruction read: 0x%04X \n", Instruction_Register); // Display the instruction that is read from the memory
 
         decode_instruction(); // Call the instruction that Decodes the instruction
