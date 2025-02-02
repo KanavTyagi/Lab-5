@@ -19,7 +19,7 @@
 
 #include "Loader.h"
 #include "Decode.h"
-
+#include "Load_instruction.h"
 // Turn on and off diagnostics 
 //#define DEBUG
 
@@ -83,12 +83,12 @@ void bus(unsigned short mar, unsigned short* mbr, Read_Or_Write R_OR_W, Word_Or_
 void fetch_instruction(void) {
 
     // To Read instruction from memory we would use the bus 
-	mar = Prog_Counter; // Set the memory address register to the program counter
+	mar = PC; // Set the memory address register to the program counter
 	bus(mar, &mbr, READING, WORD); // Read a word from memory as the instructions are 2 bytes long 
     Instruction_Register = mbr; // Get the instruction that is stored in the memory buffer register
-    validate_PC(Prog_Counter);
-    if (Prog_Counter < Max_PC) { // If the program counter is at the end of the memory then the program has ended
-        Prog_Counter += Prog_Step;  // Increment program counter by 2 here as this is where we would have read an instruction from the memory 
+    validate_PC(PC);
+    if (PC < Max_PC) { // If the program counter is at the end of the memory then the program has ended
+        PC += Prog_Step;  // Increment program counter by 2 here as this is where we would have read an instruction from the memory 
         // and would need to update the program counter to the next instruction
         // this is going to be for just  the purpose of the lab 2 
         // for the next tasks change this
@@ -99,7 +99,7 @@ void fetch_instruction(void) {
     }
 
 
-    validate_PC(Prog_Counter); // Validate the program counter after updating it
+    validate_PC(PC); // Validate the program counter after updating it
 	
 	// Returns the instruction that is read from the memory	return instruction_read; // Return the instruction that is read from the memory
 }
@@ -123,7 +123,28 @@ void decode_instruction(void) {
         DISPLAY_Branch();
         break;
 
-	case 2: // Arthametic and logical instructions group
+	case 2: 
+        switch (GET_BITS_12_10(Instruction_Register)) {
+        case 0:
+        case 1:
+		case 2:
+            DISPLAY_ARTH();
+            break;
+			// case 3 adn case 4 are going to be invalid instructions
+            // case 5 is illegal not to be implemented ever do that change ;ater
+        case 6:
+			printf("Load_instruction()\n");
+            Load_instruction(); // execute the load instruction
+            break;
+        case 7:
+			printf("Store_instruction()\n"); // execute the store instruction
+			break;
+        default:
+			printf("Invalid Instruction\n");
+			printf("0x%04X\n", Instruction_Register); // Display the instruction that is read from the memory
+			break;
+        }
+        // Arthametic and logical instructions group
         // And for the instruction that would need to be decoded in this lab 
 		// any with the next 3 bit being more than 2 would be invalid
         if (GET_BITS_12_10(Instruction_Register) >= 2) {
@@ -132,8 +153,7 @@ void decode_instruction(void) {
             break;
         }
 		else { //  If the instruction is valid then decode it
-            DISPLAY_ARTH();
-            break;
+            
         }
 	case 3: // These would be the move instructions and we would not be needed to decode in this lab 
 		    // so we would just display the instruction
@@ -142,6 +162,7 @@ void decode_instruction(void) {
 	case 4: // These both would be the load instructions and we would not be needed to decode in this lab 
     case 5: // so we would just display the instruction
         printf("LDR: 0x%04X\n", Instruction_Register);
+		
         break;
 	case 6: // These both would be the store instructions and we would not be needed to decode in this lab
 	case 7: // so we would just display the instruction
@@ -172,12 +193,13 @@ void instruction_menue(void) {
     while (continue_program) {
         // Display Menu
         printf("\n===== MENU =====\n");
-        printf("Current Program Counter : %04X\n", Prog_Counter);
+        printf("Current Program Counter : %04X\n", PC);
+        printf("0. Exit\n");
         printf("1. Read next instruction\n");
         printf("2. Input custom instruction\n");
         printf("3. Display memory\n");
         printf("4. Change program counter\n");
-        printf("5. Exit\n");
+        printf("5. Print out the Register\n");
         printf("Enter your choice: ");
 
         // Get user choice
@@ -186,6 +208,10 @@ void instruction_menue(void) {
 		printf("\n");   
         // Handle user choice
         switch (choice) {
+        case '0': // Exit program
+            printf("Exiting...\n");
+            continue_program = FALSE;  // Exit loop
+            break;
 
 		case '1': // Read next instruction from memory
             read_next_instruction();
@@ -202,11 +228,10 @@ void instruction_menue(void) {
 		case '4': // Change program counter
             change_program_counter();
             break;
+		case '5': // Print out the Register
+			print_register_file();
+			break;
 
-		case '5': // Exit program
-            printf("Exiting...\n");
-            continue_program = FALSE;  // Exit loop
-            break;
         default:
             printf("Invalid choice. Please enter a number between 1 and 5.\n");
         }

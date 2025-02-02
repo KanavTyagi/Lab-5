@@ -9,14 +9,15 @@
  * change_program_counter: Allows the user to update the program counter by inputting a new hexadecimal value.
  * input_custom_instruction: Lets the user input a custom instruction in hexadecimal format and caalls the function to decode it.
  * read_next_instruction: Fetches the next instruction from memory, calls function to decodes it, and updates the program counter accordingly.
- *
+ * update PSW:  
+ * 
  */
 
 
 
 #include "Decode.h"
 #include "Loader.h"
-
+#include "Load_instruction.h"
 
  // uncomment the line below to enable debug mode
 //#define DEBUG
@@ -35,8 +36,8 @@ void change_program_counter() {
 	if (scanf("%x", &new_pc) == TRUE) { // Read a hexadecimal number
 
         if (validate_PC(new_pc)) {
-            Prog_Counter = new_pc; // Update the Program Counter
-			printf("Program Counter updated to: %04X\n", Prog_Counter); // Display the updated Program Counter
+            PC = new_pc; // Update the Program Counter
+			printf("Program Counter updated to: %04X\n", PC); // Display the updated Program Counter
 #ifdef DEBUG
             printf("Program Counter: %04X\n", new_pc);
 #endif // DEBUG

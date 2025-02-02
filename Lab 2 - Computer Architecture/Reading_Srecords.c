@@ -13,7 +13,7 @@
 
 #include "Loader.h"
 #include "Decode.h"
-
+#include "Load_instruction.h"
 
 // Uncomment the following line to enable DEBUG mode 
 //#define DEBUG
@@ -149,11 +149,11 @@ void parse_S9(const char* buffer, unsigned int byte_count, unsigned int address)
 
     starting_address = (unsigned short)address; // Saving the starting address to the global variable 
 	// Saving it in a diffrent variable as we might need to use it later
-	Prog_Counter = starting_address; // Saving the starting address to the Program Counter
+	PC = starting_address; // Saving the starting address to the Program Counter
 
 #ifdef DEBUG
     printf("S9 Record Parsed:\n");
-    printf("  Starting Address: 0x%04X\n", Prog_Counter);
+    printf("  Starting Address: 0x%04X\n", PC);
 #endif
 }
 

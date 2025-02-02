@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="Decode.h" />
     <ClInclude Include="Loader.h" />
+    <ClInclude Include="Load_instruction.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="execute_Instruction.c" />
@@ -137,6 +138,7 @@
     <ClCompile Include="file_operation.c" />
     <ClCompile Include="Reading_Srecords.c" />
     <ClCompile Include="Main.c" />
+    <ClCompile Include="Register_Init_function.c" />
     <ClCompile Include="suplementry_function.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

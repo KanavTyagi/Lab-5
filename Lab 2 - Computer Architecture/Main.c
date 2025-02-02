@@ -9,6 +9,8 @@
 
 #include "Loader.h"
 #include "Decode.h"
+#include "Load_instruction.h"
+
 
 union Memory memory = { Initilizer }; // Initialize the memory to 0 as there cant be an instruction 0x0000 (can be but doesnt make sense to have a bracnh with offset 0)
 bool Error_Flag = FALSE; // This flag is going to be used to check if there is an error in the file that is being processed
@@ -48,7 +50,7 @@ int main(int argc, char* argv[]) {
     if (Error_Flag == FALSE) {
         // Display the extracted filename and starting address
         printf("Source Filename: %s\n", file_name);
-        printf("Starting Address: 0x%04X\n", Prog_Counter);
+        printf("Starting Address: 0x%04X\n", starting_address);
         instruction_menue();
         printf("-------------------------------------------------");
         //Check_memmory();

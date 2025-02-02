@@ -21,6 +21,9 @@
     <ClInclude Include="Decode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Load_instruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.c">
@@ -42,6 +45,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Memory_Display_functions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Register_Init_function.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

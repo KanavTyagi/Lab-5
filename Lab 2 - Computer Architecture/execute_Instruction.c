@@ -16,7 +16,7 @@
 
 #include "Loader.h"
 #include "Decode.h"
-
+#include "Load_instruction.h"
 
 // Turn on ad off diagnostics
 //#define DEBUG
@@ -31,7 +31,7 @@ char* branch[Branch_Instruction] = { "BEQ/BZ" , "BNE/BNZ" ,"BC/BHS", "BNC/BLO", 
 
 // This is the array that is going to be used to store the values of the registers and the constant values
 // The values had been initialized to the values that are given in the lab
-unsigned short  Register_file[NUM_REGISTER_TYPES][NUM_REGISTERS] = { {0xF0A0, 0xF0A1, 0xF0A2, 0xF0A3, 0xF0A4, 0xF0A5, 0xF0A6, 0xF0A7}, // Registers 
+unsigned short  Register_file[NUM_REGISTER_TYPES][NUM_REGISTERS] = { {0xF0A0, 0xF0A2, 0xF0A2, 0xF0A3, 0xF0A4, 0xF0A5, 0xF0A6, 0xF0A7}, // Registers 
 																	{0x0000, 0x0001 ,0x0002 , 0x0004, 0x0008, 0x0010, 0x0020, 0xFFFF } }; // Constants
 
 
@@ -59,8 +59,8 @@ void DISPLAY_BL() {
 	printf("Instruction: BL\n"); // Display the instruction
 	printf("Encoded Offset: %X\n", (unsigned short)offset); // Display the offset
 
-	signed short New_PC = Prog_Counter + offset; 
-	printf("Current PC: %04X\n", Prog_Counter); // Display the current PC
+	signed short New_PC = PC + offset; 
+	printf("Current PC: %04X\n", PC); // Display the current PC
 	printf("New PC: %04X\n", New_PC); // Display what the new PC would have been
 
 }
@@ -92,8 +92,8 @@ void DISPLAY_Branch(void) {
 	printf("Instruction: %s\n", branch[GET_BITS_12_10(Instruction_Register)]); // Display the instruction by getting it from the array using the buts 12 11 10
 	printf("Encoded Offset: %0X\n", (unsigned short)offset); // Display the offset that is encoded in the instruction using typecasting to pront it accurately 
 
-	signed int New_PC = Prog_Counter + offset; // Use wider type for PC calculation
-	printf("Current PC: %04X\n", Prog_Counter);
+	signed int New_PC = PC + offset; // Use wider type for PC calculation
+	printf("Current PC: %04X\n", PC);
 	printf("New PC: %04X\n", New_PC);
 
 }

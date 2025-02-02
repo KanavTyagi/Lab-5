@@ -8,6 +8,7 @@
 
 #include "Loader.h"
 #include "Decode.h"
+#include "Load_instruction.h"
 
 // Uncomment the following line to enable DEBUG mode
 //#define DEBUG
