@@ -10,7 +10,7 @@
 #include "Loader.h"
 #include "Decode.h"
 #include "Load_instruction.h"
-
+#include "Branch_Inst.h"
 
 union Memory memory = { Initilizer }; // Initialize the memory to 0 as there cant be an instruction 0x0000 (can be but doesnt make sense to have a bracnh with offset 0)
 bool Error_Flag = FALSE; // This flag is going to be used to check if there is an error in the file that is being processed

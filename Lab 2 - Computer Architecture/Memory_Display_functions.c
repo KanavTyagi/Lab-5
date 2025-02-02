@@ -9,6 +9,11 @@
 #include "Loader.h"
 #include "Decode.h"
 #include "Load_instruction.h"
+#include "Branch_Inst.h"
+
+
+
+
 
 // Uncomment the following line to enable DEBUG mode
 //#define DEBUG

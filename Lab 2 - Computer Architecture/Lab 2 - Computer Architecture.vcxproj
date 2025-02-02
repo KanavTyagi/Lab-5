@@ -127,12 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Branch_Inst.h" />
     <ClInclude Include="Decode.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="Load_instruction.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="execute_Instruction.c" />
+    <ClCompile Include="ALU_instruction.c" />
+    <ClCompile Include="Branch_Instruction.c" />
     <ClCompile Include="Fetch.C" />
     <ClCompile Include="Memory_Display_functions.c" />
     <ClCompile Include="file_operation.c" />

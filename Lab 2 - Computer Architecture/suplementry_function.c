@@ -18,6 +18,8 @@
 #include "Decode.h"
 #include "Loader.h"
 #include "Load_instruction.h"
+#include "Branch_Inst.h"
+
 
  // uncomment the line below to enable debug mode
 //#define DEBUG

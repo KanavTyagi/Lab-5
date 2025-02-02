@@ -19,6 +19,19 @@
 #define LR Register_file[0][5] // This is the link register that is going to be used to store the return address of the function
 
 
+// these are the psw structcture that is going to be used
+
+typedef struct {
+	bool N; // This is the negative flag
+	bool Z; // This is the zero flag
+	bool C; // This is the carry flag
+	bool V; // This is the overflow flag
+
+} PSW;
+
+extern PSW psw; // This is the psw that is going to be used to store the flags
+
+
 extern void print_register_file(void); // This is the function that is going to be used to print the register file
 extern void Load_instruction(void); // This is the function that is going to be used to load the instruction into the memory
 

@@ -24,6 +24,9 @@
     <ClInclude Include="Load_instruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Branch_Inst.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.c">
@@ -35,7 +38,7 @@
     <ClCompile Include="Fetch.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="execute_Instruction.c">
+    <ClCompile Include="Branch_Instruction.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="suplementry_function.c">
@@ -48,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Register_Init_function.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ALU_instruction.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

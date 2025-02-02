@@ -20,6 +20,9 @@
 #include "Loader.h"
 #include "Decode.h"
 #include "Load_instruction.h"
+#include "Branch_Inst.h"
+
+
 // Turn on and off diagnostics 
 //#define DEBUG
 

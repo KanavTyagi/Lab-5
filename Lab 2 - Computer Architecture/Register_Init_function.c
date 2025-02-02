@@ -14,7 +14,7 @@
 #include "Decode.h"
 #include "Loader.h"
 #include "Load_instruction.h"
-
+#include "Branch_Inst.h"
 
  // Uncomment the following line to enable DEBUG mode
 #define DEBUG
@@ -54,6 +54,9 @@ void Load_instruction(void) {
 	printf("Memory at Destination is : %04X \n", MEMORY_WORD(Destination_Register(DDD, REGISTER)));
 
 #endif
+
+	// getting the bits into the variables
+	// so we dont have to keep on checking the bits again and again using the macro 
 	bool prepose = GET_BIT(Instruction_Register,PRPO); // This is the flag that is going to be used to check if the prepose bit is set
 	bool decrement = GET_BIT(Instruction_Register, DEC); // This is the flag that is going to be used to check if the decrement bit is set
 	bool increment = GET_BIT(Instruction_Register, INC); // This is the flag that is going to be used to check if the increment bit is set
