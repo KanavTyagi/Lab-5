@@ -56,5 +56,8 @@
     <ClCompile Include="ALU_instruction.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="testing.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -37,11 +37,20 @@
 
 
 
+// The lower address is at the lower address (little endian)
+// so to get the higher byte we would need to do + 1 to the index
+union REGISTER_FILE {
+    unsigned short WORD[NUM_REGISTER_TYPES][NUM_REGISTERS];
+    unsigned char BYTE[NUM_REGISTER_TYPES][NUM_REGISTERS * 2];
+};
+typedef union REGISTER_FILE regis_file;
 
-// This is the array that is going to be used to store the names of the 4
+extern regis_file Register_file;
+
+
 // instructions and be used to look up the names of the instructions
 extern char* arthamatic[Arthanetic_Instruction_Groups][Arthametic_Instruction]; // This is the array that is going to be used to store the names of the Arthametic and logical instructions instructions
-extern unsigned short Register_file[NUM_REGISTER_TYPES][NUM_REGISTERS]; // This is the array that is going to be used to store the values of the registers  and the constant values
+
 extern unsigned short mbr; // This is the memory buffer register that is going to be used to store the data that is going to be read from the memory
 extern unsigned short mar; // This is the memory address register that is going to be used to store the address that is going to be read from the memory
 extern unsigned short Instruction_Register; // this is the register that is going to be used to store the instruction that is going to be read from the memory using the bus

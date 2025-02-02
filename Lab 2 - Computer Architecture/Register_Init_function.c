@@ -9,7 +9,7 @@
  * void print_register_file(void): 
  *
  */
-
+ 
 
 #include "Decode.h"
 #include "Loader.h"
@@ -20,11 +20,20 @@
 #define DEBUG
 
 
+regis_file Register_file = {
+		.WORD = {
+			{ 0xF0A0, 0xF0A2, 0xF0A2, 0xF0A3, 0xF0A4, 0xF0A5, 0xF0A6, 0xF0A7 }, // Registers
+			{ 0x0000, 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0xFFFF }  // Constants
+		}
+};
 // This is the function that is going to be used to print the register file
 void print_register_file(void) {
 
 	for (int i = 0; i < NUM_REGISTERS; i++) {
-		printf("Register %d: 0x%04X\n", i, Register_file[0][i]);
+		printf("Register %d: 0x%04X\n", i, Register_file.WORD[0][i]);
+	}
+	for (int i = 0; i < NUM_REGISTERS * 2; i++) {
+		printf("Register %d: 0x%04X\n", i / 2, Register_file.BYTE[0][i]);
 	}
 }
 
@@ -126,24 +135,40 @@ void Execute_Move(void) {
 
 #ifdef DEBUG
 	// print to check if the right regoster is being used
+	printf("Value Read : %d\n", MOVE_OP_BITS(Instruction_Register));
+	printf("Before Moving\n");
 	printf("Destination Register R%d : %04X\n", DDD, Destination_Register(DDD));
 #endif
 	//  now we need to extarct the value from the instruction
-
 	unsigned char value = GET_MOVE_VALUE(Instruction_Register);
 
 
 	// we would get the bits that would tell us what move fucntion we are dealing with 
 	switch (MOVE_OP_BITS(Instruction_Register)) {
-	// since we are going to be modifying the bytes then we would access the memory as byte
+		// since we are going to be modifying the bytes then we would access the memory as byte
 
 	case MOVL: // the highbbyte would be unchanged and the lower byte will be modified
+		Destination_Register_Low_Byte(DDD) = value; // changing the low byte 
+		break;
 
 	case MOVLZ: // the high byte woul be cleared and the lower byte modified
+		Destination_Register_Low_Byte(DDD) = value;
+		Destination_Register_High_Byte(DDD) = 0x00; // this would make the higher bits 0 and the loweer would still be the updated value 
+		break;
+
 	case MOVLS: // the high byte would be set and the low would be modified
+		Destination_Register_Low_Byte(DDD) = value;
+		Destination_Register_High_Byte(DDD) = 0xFF; // this would make the higher bits 1 and the loweer would still be the updated value 
+		break;
+
 	case MOVH: // the high byte modified and the lowerbyte unchanged
-
-
-	}
+		Destination_Register_High_Byte(DDD) = value;
+		break;
+	};
+#ifdef DEBUG
+	// print to check if the right regoster is being used
+	printf("after Moving\n");
+	printf("Destination Register R%d : %04X\n", DDD, Destination_Register(DDD));
+#endif
 
 }

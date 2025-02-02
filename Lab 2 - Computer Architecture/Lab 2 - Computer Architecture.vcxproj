@@ -142,6 +142,7 @@
     <ClCompile Include="Main.c" />
     <ClCompile Include="Register_Init_function.c" />
     <ClCompile Include="suplementry_function.c" />
+    <ClCompile Include="testing.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

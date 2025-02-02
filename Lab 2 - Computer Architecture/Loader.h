@@ -46,6 +46,7 @@ union Memory {
 	unsigned char byte[MEMSIZE];
 };
 
+
 // Global Variable to srtoe the memory array
 extern union Memory memory; // Memmory array where data and instructions will be saved 
 

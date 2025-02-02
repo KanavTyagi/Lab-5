@@ -160,10 +160,11 @@ void decode_instruction(void) {
 		//else { //  If the instruction is valid then decode it
   //          
   //      }
-	case 3: // These would be the move instructions and we would not be needed to decode in this lab 
-		    // so we would just display the instruction
+	case 3: // these would be the move instructions so we would disaply the instruction for now 
         printf("Move instruction: 0x%04X\n", Instruction_Register);
+        Execute_Move();
         break;
+
 	case 4: // These both would be the load instructions and we would not be needed to decode in this lab 
     case 5: // so we would just display the instruction
         printf("LDR: 0x%04X\n", Instruction_Register);

@@ -40,10 +40,7 @@ PSW psw = { Initilizer }; // Initialize the program status word to be all zeros
 
 // This is the array that is going to be used to store the values of the registers and the constant values
 // The values had been initialized to the values that are given in the lab
-unsigned short  Register_file[NUM_REGISTER_TYPES][NUM_REGISTERS] = { {0xF0A0, 0xF0A2, 0xF0A2, 0xF0A3, 
-																	  0xF0A4, 0xF0A5, 0xF0A6, 0xF0A7}, // Registers 
-																	{0x0000, 0x0001 ,0x0002 , 0x0004,
-																	0x0008, 0x0010, 0x0020, 0xFFFF } }; // Constants
+
 
 
 // this function is going to be used to prompt the contents of the Branch always instruction

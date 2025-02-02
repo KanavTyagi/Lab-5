@@ -13,7 +13,8 @@
 #define Branch_sign_extend 0xFC00 // This is the mask that is going to be used to sign extend the Branch instruction
 
 // This is the enum that is going to be used to keep track of the 
-// different types of branch instructions that we have
+// different types of branch instructions that we hav
+
 typedef struct {
     const char* name;
     bool (*check_cond)(void);
@@ -21,7 +22,6 @@ typedef struct {
 
 
 extern BranchEntry branch[Branch_Instruction]; // This is the array that is going to be used to store the names of the Branch instructions
-
 
 extern bool cond_BEQ_BZ(void); // This is the function that is going to be used to check if the condition is met for the BEQ/BZ instruction
 extern bool cond_BNE_BNZ(void); // This is the function that is going to be used to check if the condition is met for the BNE/BNZ instruction

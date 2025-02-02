@@ -38,8 +38,8 @@ void DISPLAY_ARTH(void) {
 
 	unsigned short R_C = GET_BIT(Instruction_Register, R_C_BIT); // Getting the R/C bit from the opcode which is saved in bit 7
 	unsigned short W_B = GET_BIT(Instruction_Register, W_B_BIT); // Getting the W/B bit from the opcode which is saved in bit 7
-	unsigned short Source = Register_file[R_C][GET_BITS_5_3(Instruction_Register)]; // Getting the source from the opcode
-	unsigned short Destination = Register_file[0][GET_BITS_2_0(Instruction_Register)]; // Getting the destination from the opcode
+	unsigned short Source = Register_file.WORD[R_C][GET_BITS_5_3(Instruction_Register)]; // Getting the source from the opcode
+	unsigned short Destination = Register_file.WORD[0][GET_BITS_2_0(Instruction_Register)]; // Getting the destination from the opcode
 #ifdef DEBUG
 
 	printf("%c\n", R_C);
