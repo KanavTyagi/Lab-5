@@ -20,8 +20,6 @@
 #define DEBUG
 
 
-
-
 // This is the function that is going to be used to print the register file
 void print_register_file(void) {
 
@@ -29,8 +27,6 @@ void print_register_file(void) {
 		printf("Register %d: 0x%04X\n", i, Register_file[0][i]);
 	}
 }
-
-
 
 // This is the function that is going to be used to load data into the memory
 // this is going to get the data from the memry address stored in the SSS(543)
@@ -121,5 +117,33 @@ void Load_instruction(void) {
 #endif 
 }
 
+// now we would need to implement the move instruction
 
-///
+void Execute_Move(void) {
+	// first we would need to get the destination register
+	unsigned short DDD = GET_DDD(Instruction_Register); // This is the destination register index from the register file
+	// now we could access the refgister using the  macros we have
+
+#ifdef DEBUG
+	// print to check if the right regoster is being used
+	printf("Destination Register R%d : %04X\n", DDD, Destination_Register(DDD));
+#endif
+	//  now we need to extarct the value from the instruction
+
+	unsigned char value = GET_MOVE_VALUE(Instruction_Register);
+
+
+	// we would get the bits that would tell us what move fucntion we are dealing with 
+	switch (MOVE_OP_BITS(Instruction_Register)) {
+	// since we are going to be modifying the bytes then we would access the memory as byte
+
+	case MOVL: // the highbbyte would be unchanged and the lower byte will be modified
+
+	case MOVLZ: // the high byte woul be cleared and the lower byte modified
+	case MOVLS: // the high byte would be set and the low would be modified
+	case MOVH: // the high byte modified and the lowerbyte unchanged
+
+
+	}
+
+}

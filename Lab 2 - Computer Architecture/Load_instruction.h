@@ -9,6 +9,8 @@
 #define Destination_Register(x) Register_file[0][x] // This is the macro that is going to be used to get the destination register
 #define MEMORY_WORD(x) memory.word[x >> 1] // This is the macro that is going to be used to get the word from the memory 
 #define MEMORY_BYTE(x) memory.byte[x] // This is the macro that is going to be used to get the byte from the memory
+#define MOVE_OP_BITS(x) (((x) >> 10) & 0x03 ) // this can get the 12th to 10th bit from the value
+#define GET_MOVE_VALUE(x) (((x) >> 3)& 0xFF) // this would get us the value thats been stored in the move instruction opcode
 
 #define PRPO 9 // This is the bit that is going to be used to get the prepose bit
 #define DEC 8 // This is the bit that is going to be used to get the decrement bit
@@ -31,9 +33,14 @@ typedef struct {
 
 extern PSW psw; // This is the psw that is going to be used to store the flags
 
+// These are the different types of load instructions that
+// WE are going to be IMPLEMENTING 
+enum {	MOVL, MOVLZ, MOVLS, MOVH };
 
 extern void print_register_file(void); // This is the function that is going to be used to print the register file
 extern void Load_instruction(void); // This is the function that is going to be used to load the instruction into the memory
+extern void Execute_Move(void); // This is the function that is going to be used to execute the move instruction
+
 
 
 

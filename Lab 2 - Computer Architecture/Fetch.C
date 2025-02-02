@@ -119,11 +119,11 @@ void decode_instruction(void) {
     switch (first3) {
     
 	case 0: // Branch with link instruction is the only instruction in this group
-        DISPLAY_BL();
+        Execute_BL();
         break;
 
 	case 1: // Branch instructions other the branch with link
-        DISPLAY_Branch();
+        Execute_Branch();
         break;
 
 	case 2: 
@@ -150,14 +150,16 @@ void decode_instruction(void) {
         // Arthametic and logical instructions group
         // And for the instruction that would need to be decoded in this lab 
 		// any with the next 3 bit being more than 2 would be invalid
-        if (GET_BITS_12_10(Instruction_Register) >= 2) {
-            printf("Invalid Instruction\n");
-            printf("0x%04X\n", Instruction_Register); // Display the instruction that is read from the memory
-            break;
-        }
-		else { //  If the instruction is valid then decode it
-            
-        }
+        // ///////////////////////////////////////
+        // Probably not needed now check later Fucked 
+  //      if (GET_BITS_12_10(Instruction_Register) >= 2) {
+  //          printf("Invalid Instruction\n");
+  //          printf("0x%04X\n", Instruction_Register); // Display the instruction that is read from the memory
+  //          break;
+  //      }
+		//else { //  If the instruction is valid then decode it
+  //          
+  //      }
 	case 3: // These would be the move instructions and we would not be needed to decode in this lab 
 		    // so we would just display the instruction
         printf("Move instruction: 0x%04X\n", Instruction_Register);

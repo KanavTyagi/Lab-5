@@ -8,8 +8,8 @@
  * and handling user interactions using a menu-driven interface.
  *
  * Functions:
- * DISPLAY_BL: Displays the contents related to the Branch with Link (BL) instructions.
- * DISPLAY_Branch: Displays other branch instructions based on the decoded opcode.
+ * Execute_BL: Displays the contents related to the Branch with Link (BL) instructions.
+ * Execute_Branch: Displays other branch instructions based on the decoded opcode.
  * DISPLAY_ARTH: Displays arithmetic and logical instructions with their details.
  */
 
@@ -24,7 +24,6 @@
 //#define DEBUG
 
 
-
 BranchEntry branch[] = {
 	{ "BEQ/BZ",   cond_BEQ_BZ   },
 	{ "BNE/BNZ",  cond_BNE_BNZ  },
@@ -36,16 +35,19 @@ BranchEntry branch[] = {
 	{ "BRA",      cond_BRA      },
 };
 
-PSW psw = { 0 }; // Initialize the program status word
+PSW psw = { Initilizer }; // Initialize the program status word to be all zeros
+// all flags are set to false  
 
 // This is the array that is going to be used to store the values of the registers and the constant values
 // The values had been initialized to the values that are given in the lab
-unsigned short  Register_file[NUM_REGISTER_TYPES][NUM_REGISTERS] = { {0xF0A0, 0xF0A2, 0xF0A2, 0xF0A3, 0xF0A4, 0xF0A5, 0xF0A6, 0xF0A7}, // Registers 
-																	{0x0000, 0x0001 ,0x0002 , 0x0004, 0x0008, 0x0010, 0x0020, 0xFFFF } }; // Constants
+unsigned short  Register_file[NUM_REGISTER_TYPES][NUM_REGISTERS] = { {0xF0A0, 0xF0A2, 0xF0A2, 0xF0A3, 
+																	  0xF0A4, 0xF0A5, 0xF0A6, 0xF0A7}, // Registers 
+																	{0x0000, 0x0001 ,0x0002 , 0x0004,
+																	0x0008, 0x0010, 0x0020, 0xFFFF } }; // Constants
 
 
-// this function is going to be used to pront the contents of the Branch always instruction
-void DISPLAY_BL() {
+// this function is going to be used to prompt the contents of the Branch always instruction
+void Execute_BL() {
 	
 	signed short offset = Instruction_Register & BL_Offset; // Extract 13-bit offset
 
@@ -80,11 +82,7 @@ void DISPLAY_BL() {
 
 }
 
-
-
-
-
-void DISPLAY_Branch(void) {
+void Execute_Branch(void) {
 	// This is the instruction that is going to be used to execute teh BL instruction
 
 	// the first thing we would do is check if the instruction's required flag is met or not 
@@ -134,18 +132,9 @@ void DISPLAY_Branch(void) {
 		printf("Condition not met\n"); // Display the condition not met
 	}
 #endif
-
-	
-	
-
-
 	// we would use a table look up to see if we can see if we need to perform the instruction or not 
 
 }
-
-
-
-
 
 bool cond_BEQ_BZ(void) {
 	// Branch if Zero
@@ -163,7 +152,7 @@ bool cond_BC_BHS(void) {
 }
 
 bool cond_BNC_BLO(void) {
-	// Branch if Carry clear => (unsigned lower)
+	// Branch if Carry clear
 	return !psw.C;
 }
 

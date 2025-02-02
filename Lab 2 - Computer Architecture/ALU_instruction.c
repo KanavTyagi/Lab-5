@@ -8,8 +8,8 @@
  * and handling user interactions using a menu-driven interface.
  *
  * Functions:
- * DISPLAY_BL: Displays the contents related to the Branch with Link (BL) instructions.
- * DISPLAY_Branch: Displays other branch instructions based on the decoded opcode.
+ * Execute_BL: Displays the contents related to the Branch with Link (BL) instructions.
+ * Execute_Branch: Displays other branch instructions based on the decoded opcode.
  * DISPLAY_ARTH: Displays arithmetic and logical instructions with their details.
  */
 
