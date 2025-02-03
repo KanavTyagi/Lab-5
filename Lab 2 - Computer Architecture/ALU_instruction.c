@@ -18,6 +18,9 @@
 #include "Decode.h"
 #include "Load_instruction.h"
 #include "Branch_Inst.h"
+#include "ALU.h"
+
+
 
 
  // This is the array that is going to be used to store the names of the arthametic and logical instructions that are to be used in this lab
@@ -35,6 +38,10 @@ char* arthamatic[Arthanetic_Instruction_Groups][Arthametic_Instruction] = { {"AD
 // Source : 01
 // Destination : A5
 void DISPLAY_ARTH(void) {
+
+	if (GET_BITS_12_10(Instruction_Register) == 0) {
+		execute_ADD();
+	}
 
 	unsigned short R_C = GET_BIT(Instruction_Register, R_C_BIT); // Getting the R/C bit from the opcode which is saved in bit 7
 	unsigned short W_B = GET_BIT(Instruction_Register, W_B_BIT); // Getting the W/B bit from the opcode which is saved in bit 7
@@ -65,5 +72,39 @@ void DISPLAY_ARTH(void) {
 		printf("Source: %02X\n", Source);
 		printf("Destination: %02X\n", Destination);
 	}
+
+}
+
+
+void execute_ADD(void) {
+	// first we would need 
+    // to 
+	// 
+	
+	bool R_C = GET_BIT(Instruction_Register, R_C_BIT); // Getting the R/C bit from the opcode which is saved in bit 7
+	bool W_B = GET_BIT(Instruction_Register, W_B_BIT); // Getting the W/B bit from the opcode which is saved in bit 7
+
+
+	unsigned short SSS = GET_BITS_5_3(Instruction_Register); // Getting the source from the opcode
+	unsigned short DDD = GET_BITS_2_0(Instruction_Register); // Getting the destination from the opcode
+	// we would get the value from the register file
+	// we would store it in the variable as if it is a subtract then we would need to take the cmplement
+	unsigned int source_val = Source_Register(SSS, R_C);
+
+	unsigned char Extra_add_bit = 0;
+	if (GET_BITS_9_8(Instruction_Register) == 2 || GET_BITS_9_8(Instruction_Register) == 3){
+		source_val = ~source_val;
+		Extra_add_bit = 1;
+	}
+	if (GET_BITS_9_8(Instruction_Register) == 2 || GET_BITS_9_8(Instruction_Register) == 1) {
+		// now we would need to take into account the carry bit 
+		Extra_add_bit += CARRY;
+	}
+
+	if (W_B == WORD) {
+		Destination_Register(DDD) = Destination_Register(DDD) + (signed short)source_val;
+	}
+
+
 
 }

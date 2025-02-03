@@ -21,7 +21,10 @@
 #define PC Register_file.WORD[0][7] // This is the program counter that is going to be used to store the address of the next instruction
 #define SP Register_file.WORD[0][6] // This is the stack pointer that is going to be used to store the address of the top of the stack
 #define LR Register_file.WORD[0][5] // This is the link register that is going to be used to store the return address of the function
-
+#define CARRY psw.C
+#define ZERO psw.Z
+#define OverFlow psw.V
+#define NEGATIVE psw.Z
 
 // these are the psw structcture that is going to be used
 

@@ -111,7 +111,6 @@ void fetch_instruction(void) {
 // This function will take an instruction as input and decode it 
 // The instruction passed can be from the memory or a custom instruction that has been entered by the user
 void decode_instruction(void) {
-
     // Get the top 3 bits of the instruction to decode the first step
 	unsigned first3 = GET_TOP3(Instruction_Register);
     
@@ -130,23 +129,23 @@ void decode_instruction(void) {
         switch (GET_BITS_12_10(Instruction_Register)) {
         case 0:
         case 1:
-		case 2:
+        case 2:
             DISPLAY_ARTH();
             break;
-			// case 3 adn case 4 are going to be invalid instructions
+            // case 3 adn case 4 are going to be invalid instructions
             // case 5 is illegal not to be implemented ever do that change ;ater
         case 6:
-			printf("Load_instruction()\n");
+            printf("Load_instruction()\n");
             Load_instruction(); // execute the load instruction
             break;
         case 7:
-			printf("Store_instruction()\n"); // execute the store instruction
-			break;
+            printf("Store_instruction()\n"); // execute the store instruction
+            break;
         default:
-			printf("Invalid Instruction\n");
-			printf("0x%04X\n", Instruction_Register); // Display the instruction that is read from the memory
-			break;
-        }
+            printf("Invalid Instruction\n");
+            printf("0x%04X\n", Instruction_Register); // Display the instruction that is read from the memory
+            break;
+        };
         // Arthametic and logical instructions group
         // And for the instruction that would need to be decoded in this lab 
 		// any with the next 3 bit being more than 2 would be invalid
@@ -160,6 +159,7 @@ void decode_instruction(void) {
 		//else { //  If the instruction is valid then decode it
   //          
   //      }
+        break;
 	case 3: // these would be the move instructions so we would disaply the instruction for now 
         printf("Move instruction: 0x%04X\n", Instruction_Register);
         Execute_Move();
@@ -191,6 +191,7 @@ void decode_instruction(void) {
 // This function is going to be used to give the user the menue
 // then according to the users choice the appropriate function would be called
 void instruction_menue(void) {
+    //getchar(); // clear the memory buffer
 	char choice; // User choice
 	int continue_program = TRUE;  // Control flag to make sure we can exit the loop
                                   // Would need to be updated in the next tasks 
@@ -240,6 +241,7 @@ void instruction_menue(void) {
 
         default:
             printf("Invalid choice. Please enter a number between 1 and 5.\n");
+            break;
         }
     }
 }

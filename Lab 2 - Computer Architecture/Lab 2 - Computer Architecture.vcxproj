@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ALU.h" />
     <ClInclude Include="Branch_Inst.h" />
     <ClInclude Include="Decode.h" />
     <ClInclude Include="Loader.h" />

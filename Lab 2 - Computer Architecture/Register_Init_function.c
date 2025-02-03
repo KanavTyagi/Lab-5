@@ -19,10 +19,12 @@
  // Uncomment the following line to enable DEBUG mode
 #define DEBUG
 
+// uncomment the following to print the registers in the bytes format
+// #define Chk_Mem_Bytes
 
 regis_file Register_file = {
 		.WORD = {
-			{ 0xF0A0, 0xF0A2, 0xF0A2, 0xF0A3, 0xF0A4, 0xF0A5, 0xF0A6, 0xF0A7 }, // Registers
+			{ 0x0001, 0x0001, 0xF0A2, 0xF0A3, 0xF0A4, 0xF0A5, 0xF0A6, 0xF0A7 }, // Registers
 			{ 0x0000, 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0xFFFF }  // Constants
 		}
 };
@@ -32,9 +34,11 @@ void print_register_file(void) {
 	for (int i = 0; i < NUM_REGISTERS; i++) {
 		printf("Register %d: 0x%04X\n", i, Register_file.WORD[0][i]);
 	}
+#ifdef Chk_Mem_Bytes
 	for (int i = 0; i < NUM_REGISTERS * 2; i++) {
-		printf("Register %d: 0x%04X\n", i / 2, Register_file.BYTE[0][i]);
+		printf("Register %d: 0x%02X\n", i / 2, Register_file.BYTE[0][i]);
 	}
+#endif
 }
 
 // This is the function that is going to be used to load data into the memory
@@ -100,12 +104,13 @@ void Load_instruction(void) {
 	if (GET_BIT(Instruction_Register, W_B_BIT) == WORD) {
 		// if the W/B bit is set then we would have to load a word from the memory
 		// we would have to get the word from the memory and then load it into the destination register
-		MEMORY_WORD(Destination_Register(DDD)) = MEMORY_WORD(Source_Register(SSS, REGISTER));
+		Destination_Register(DDD) = MEMORY_WORD(Source_Register(SSS, REGISTER));
+		//printf("\n\n\n\testing success \n\n\n\n");
 	}
 	else if (GET_BIT(Instruction_Register, W_B_BIT) == BYTE) {
 		// if the W/B bit is not set then we would have to load a byte from the memory
 		// we would have to get the byte from the memory and then load it into the destination register
-		MEMORY_BYTE(Destination_Register(DDD)) = MEMORY_BYTE(Source_Register(SSS, REGISTER));
+		Destination_Register(DDD) = MEMORY_BYTE(Source_Register(SSS, REGISTER));
 	}
 
 	// now we would check if we want to do the post increment or decrement

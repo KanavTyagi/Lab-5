@@ -12,6 +12,7 @@
 #define BL_Sign_Extend 0xE000 // This is the mask that is going to be used to sign extend the BL instruction
 #define Branch_sign_extend 0xFC00 // This is the mask that is going to be used to sign extend the Branch instruction
 
+
 // This is the enum that is going to be used to keep track of the 
 // different types of branch instructions that we hav
 
@@ -19,7 +20,6 @@ typedef struct {
     const char* name;
     bool (*check_cond)(void);
 } BranchEntry;
-
 
 extern BranchEntry branch[Branch_Instruction]; // This is the array that is going to be used to store the names of the Branch instructions
 
