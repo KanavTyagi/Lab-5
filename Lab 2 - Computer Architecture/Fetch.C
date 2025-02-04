@@ -207,6 +207,7 @@ void instruction_menue(void) {
         printf("3. Display memory\n");
         printf("4. Change program counter\n");
         printf("5. Print out the Register\n");
+        printf("6. Print the PSW register value\n");
         printf("Enter your choice: ");
 
         // Get user choice
@@ -238,7 +239,9 @@ void instruction_menue(void) {
 		case '5': // Print out the Register
 			print_register_file();
 			break;
-
+        case '6':
+            print_PSW();
+            break;
         default:
             printf("Invalid choice. Please enter a number between 1 and 5.\n");
             break;

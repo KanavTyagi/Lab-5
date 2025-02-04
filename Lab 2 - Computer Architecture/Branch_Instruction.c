@@ -41,8 +41,6 @@ PSW psw = { Initilizer }; // Initialize the program status word to be all zeros
 // This is the array that is going to be used to store the values of the registers and the constant values
 // The values had been initialized to the values that are given in the lab
 
-
-
 // this function is going to be used to prompt the contents of the Branch always instruction
 void Execute_BL() {
 	
@@ -79,6 +77,8 @@ void Execute_BL() {
 
 }
 
+// this would eexecute the Branching instructionss by calling the function for checking
+// the needed flags 
 void Execute_Branch(void) {
 	// This is the instruction that is going to be used to execute teh BL instruction
 
@@ -135,42 +135,42 @@ void Execute_Branch(void) {
 
 bool cond_BEQ_BZ(void) {
 	// Branch if Zero
-	return psw.Z;
+	return ZERO;
 }
 
 bool cond_BNE_BNZ(void) {
 	// Branch if Not Zero
-	return !psw.Z;
+	return !ZERO;
 }
 
 bool cond_BC_BHS(void) {
 	// Branch if Carry set => (unsigned higher or same)
-	return psw.C;
-}
+	return CARRY;
+} 
 
 bool cond_BNC_BLO(void) {
 	// Branch if Carry clear
-	return !psw.C;
-}
+	return !CARRY;
+} 
 
 bool cond_BN(void) {
 	// Branch if Negative
-	return psw.N;
+	return NEGATIVE;
 }
 
 bool cond_BGE(void) {
 	// Branch if Greater or Equal (signed)
 	// Equivalent to: (N == V)
-	return (psw.N == psw.V);
+	return (NEGATIVE == OverFlow);
 }
 
 bool cond_BLT(void) {
 	// Branch if Less (signed)
 	// Equivalent to: (N != V)
-	return (psw.N != psw.V);
+	return (NEGATIVE != OverFlow);
 }
 
 bool cond_BRA(void) {
 	// Branch Always
-	return true;
+	return TRUE;
 }

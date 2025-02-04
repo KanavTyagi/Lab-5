@@ -13,6 +13,9 @@
 #define MEMORY_BYTE(x) memory.byte[x] // This is the macro that is going to be used to get the byte from the memory
 #define MOVE_OP_BITS(x) (((x) >> 11) & 0x03 ) // this can get the 12th to 10th bit from the value
 #define GET_MOVE_VALUE(x) (((x) >> 3)& 0xFF) // this would get us the value thats been stored in the move instruction opcode
+#define B15(x)	(((x)>>15) & 0x01)
+#define B7(x)	(((x)>>7) & 0x01)
+
 
 #define PRPO 9 // This is the bit that is going to be used to get the prepose bit
 #define DEC 8 // This is the bit that is going to be used to get the decrement bit
@@ -28,6 +31,9 @@
 
 // these are the psw structcture that is going to be used
 
+
+extern unsigned carry[2][2][2];
+extern unsigned overflow[2][2][2];
 typedef struct {
 	bool N; // This is the negative flag
 	bool Z; // This is the zero flag
@@ -45,7 +51,7 @@ enum {	MOVL, MOVLZ, MOVLS, MOVH };
 extern void print_register_file(void); // This is the function that is going to be used to print the register file
 extern void Load_instruction(void); // This is the function that is going to be used to load the instruction into the memory
 extern void Execute_Move(void); // This is the function that is going to be used to execute the move instruction
-
-
+extern void update_psw(unsigned short src, unsigned short dst, unsigned short res,	unsigned short wb);
+extern void print_PSW(void);
 
 

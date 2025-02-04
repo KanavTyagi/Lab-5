@@ -17,18 +17,24 @@
 #include "Branch_Inst.h"
 
  // Uncomment the following line to enable DEBUG mode
-#define DEBUG
+// #define DEBUG
 
 // uncomment the following to print the registers in the bytes format
 // #define Chk_Mem_Bytes
 
+
+unsigned carry[2][2][2] = { 0, 0, 1, 0, 1, 0, 1, 1 };
+unsigned overflow[2][2][2] = { 0, 1, 0, 0, 0, 0, 1, 0 };
+
+
 regis_file Register_file = {
 		.WORD = {
-			{ 0x0001, 0x0001, 0xF0A2, 0xF0A3, 0xF0A4, 0xF0A5, 0xF0A6, 0xF0A7 }, // Registers
-			{ 0x0000, 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0xFFFF }  // Constants
+			{ 0xFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 }, // Registers being initialized to 0
+			{ 0x0000, 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0xFFFF }  // Constants getting the constant value 
 		}
 };
 // This is the function that is going to be used to print the register file
+
 void print_register_file(void) {
 
 	for (int i = 0; i < NUM_REGISTERS; i++) {
@@ -40,6 +46,52 @@ void print_register_file(void) {
 	}
 #endif
 }
+void print_PSW(void) {
+	printf("Carry : %d\n", CARRY);
+	printf("Zero :  %d\n", ZERO);
+	printf("Neagative :  %d\n", NEGATIVE);
+	printf("OverFlow :  %d\n", OverFlow);
+}
+
+
+// this function would be used to update the psw register 
+// it wil get the value of the registers and the results it would
+// use the truth table to to update the rgisters 
+
+void update_psw(unsigned short src, unsigned short dst, unsigned short res,
+	unsigned short wb)
+{
+	/*
+	 - Update the PSW bits (V, N, Z, C)
+	 - Using src, dst, and res values and whether word or byte
+	 - ADD, ADDC, SUB, and SUBC
+	*/
+	unsigned short mss, msd, msr; /* Most significant src, dst, and res bits */
+
+	if (wb == 0)
+	{
+		mss = B15(src);
+		msd = B15(dst);
+		msr = B15(res);
+	}
+	else /* Byte */
+	{
+		mss = B7(src);
+		msd = B7(dst);
+		msr = B7(res);
+		res &= 0x00FF;	/* Mask high byte for 'z' check */
+	}
+
+	/* Carry */
+	CARRY = carry[mss][msd][msr];
+	/* Zero */
+	ZERO = (res == 0);
+	/* Negative */
+	NEGATIVE = (msr == 1);
+	/* oVerflow */
+	OverFlow = overflow[mss][msd][msr];
+}
+
 
 // This is the function that is going to be used to load data into the memory
 // this is going to get the data from the memry address stored in the SSS(543)
