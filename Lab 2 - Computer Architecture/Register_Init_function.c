@@ -15,6 +15,7 @@
 #include "Loader.h"
 #include "Load_instruction.h"
 #include "Branch_Inst.h"
+#include "ALU.h"
 
  // Uncomment the following line to enable DEBUG mode
 // #define DEBUG
@@ -22,14 +23,14 @@
 // uncomment the following to print the registers in the bytes format
 // #define Chk_Mem_Bytes
 
-
+#define DEBUGPSW
 unsigned carry[2][2][2] = { 0, 0, 1, 0, 1, 0, 1, 1 };
 unsigned overflow[2][2][2] = { 0, 1, 0, 0, 0, 0, 1, 0 };
 
 
 regis_file Register_file = {
 		.WORD = {
-			{ 0xFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 }, // Registers being initialized to 0
+			{ 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 }, // Registers being initialized to 0
 			{ 0x0000, 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0xFFFF }  // Constants getting the constant value 
 		}
 };
@@ -48,7 +49,7 @@ void print_register_file(void) {
 }
 void print_PSW(void) {
 	printf("Carry : %d\n", CARRY);
-	printf("Zero :  %d\n", ZERO);
+	printf("Zero :  %d\n", psw.Z);
 	printf("Neagative :  %d\n", NEGATIVE);
 	printf("OverFlow :  %d\n", OverFlow);
 }
@@ -59,13 +60,14 @@ void print_PSW(void) {
 // use the truth table to to update the rgisters 
 
 void update_psw(unsigned short src, unsigned short dst, unsigned short res,
-	unsigned short wb)
+	unsigned short wb, Add_OR_Comp Add_comp)
 {
 	/*
 	 - Update the PSW bits (V, N, Z, C)
 	 - Using src, dst, and res values and whether word or byte
 	 - ADD, ADDC, SUB, and SUBC
 	*/
+	
 	unsigned short mss, msd, msr; /* Most significant src, dst, and res bits */
 
 	if (wb == 0)
@@ -81,15 +83,29 @@ void update_psw(unsigned short src, unsigned short dst, unsigned short res,
 		msr = B7(res);
 		res &= 0x00FF;	/* Mask high byte for 'z' check */
 	}
-
-	/* Carry */
-	CARRY = carry[mss][msd][msr];
+	// the zero and the negative flags would be needed to set in all cases 
 	/* Zero */
 	ZERO = (res == 0);
+
 	/* Negative */
 	NEGATIVE = (msr == 1);
-	/* oVerflow */
-	OverFlow = overflow[mss][msd][msr];
+
+	// we would only need to update the overflow and carry flags if we are doing
+	// the addidtion operations
+	if (Add_comp == Addition) {
+		/* oVerflow */
+		OverFlow = overflow[mss][msd][msr];
+		/* Carry */
+		CARRY = carry[mss][msd][msr];
+
+	}
+#ifdef DEBUGPSW
+	printf("Carry : %d\n", CARRY);
+	printf("Zero :  %d\n", psw.Z);
+	printf("Neagative :  %d\n", NEGATIVE);
+	printf("OverFlow :  %d\n", OverFlow);
+#endif
+	
 }
 
 

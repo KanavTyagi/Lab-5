@@ -27,13 +27,14 @@
 #define CARRY psw.C
 #define ZERO psw.Z
 #define OverFlow psw.V
-#define NEGATIVE psw.Z
+#define NEGATIVE psw.N
 
 // these are the psw structcture that is going to be used
 
 
 extern unsigned carry[2][2][2];
 extern unsigned overflow[2][2][2];
+
 typedef struct {
 	bool N; // This is the negative flag
 	bool Z; // This is the zero flag
@@ -41,8 +42,12 @@ typedef struct {
 	bool V; // This is the overflow flag
 
 } PSW;
-
 extern PSW psw; // This is the psw that is going to be used to store the flags
+typedef enum {
+	Addition,
+	Compare
+} Add_OR_Comp;
+
 
 // These are the different types of load instructions that
 // WE are going to be IMPLEMENTING 
@@ -51,7 +56,7 @@ enum {	MOVL, MOVLZ, MOVLS, MOVH };
 extern void print_register_file(void); // This is the function that is going to be used to print the register file
 extern void Load_instruction(void); // This is the function that is going to be used to load the instruction into the memory
 extern void Execute_Move(void); // This is the function that is going to be used to execute the move instruction
-extern void update_psw(unsigned short src, unsigned short dst, unsigned short res,	unsigned short wb);
+extern void update_psw(unsigned short src, unsigned short dst, unsigned short res,	unsigned short wb, Add_OR_Comp Add_comp);
 extern void print_PSW(void);
 
 
