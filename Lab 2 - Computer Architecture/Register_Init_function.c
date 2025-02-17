@@ -30,7 +30,7 @@ unsigned overflow[2][2][2] = { 0, 1, 0, 0, 0, 0, 1, 0 };
 
 regis_file Register_file = {
 		.WORD = {
-			{ 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 }, // Registers being initialized to 0
+			{ 0xFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 }, // Registers being initialized to 0
 			{ 0x0000, 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0xFFFF }  // Constants getting the constant value 
 		}
 };
@@ -151,7 +151,7 @@ void Load_instruction(void) {
 		// we can only increment or decrement the source register
 		// if we check the increment adn it is false then that would mean the decrement bit is set so we would
 		// decrement the register SSS
-		Source_Register(SSS, REGISTER) = (increment ? Source_Register(SSS, REGISTER) + 1 : Source_Register(SSS, REGISTER) - 1);
+		Source_Register(SSS, REGISTER) = (increment ? Source_Register(SSS, REGISTER) + 2 : Source_Register(SSS, REGISTER) - 2);
 #ifdef DEBUG
 		printf("Source Register R%d :  , %04X\n", SSS, Source_Register(SSS, REGISTER));
 		printf("Destination Register R%d : %04X\n", DDD, Destination_Register(DDD));
@@ -172,13 +172,17 @@ void Load_instruction(void) {
 	if (GET_BIT(Instruction_Register, W_B_BIT) == WORD) {
 		// if the W/B bit is set then we would have to load a word from the memory
 		// we would have to get the word from the memory and then load it into the destination register
-		Destination_Register(DDD) = MEMORY_WORD(Source_Register(SSS, REGISTER));
+		mar = PC;
+		bus(mar, &mbr, READING, W_B_BIT);
+		Destination_Register(DDD) = mbr;
 		//printf("\n\n\n\testing success \n\n\n\n");
 	}
 	else if (GET_BIT(Instruction_Register, W_B_BIT) == BYTE) {
-		// if the W/B bit is not set then we would have to load a byte from the memory
+		// if the W/B bit is  set then we would have to load a byte from the memory
 		// we would have to get the byte from the memory and then load it into the destination register
-		Destination_Register(DDD) = MEMORY_BYTE(Source_Register(SSS, REGISTER));
+		bus(mar, &mbr, READING, W_B_BIT);
+
+		Destination_Register_Low_Byte(DDD) = (unsigned char)mbr;
 	}
 
 	// now we would check if we want to do the post increment or decrement
@@ -188,7 +192,8 @@ void Load_instruction(void) {
 		// if either of them is set then this would increment or decrement the register
 		// if neither is set then this would not do anything
 
-		Source_Register(SSS, REGISTER) += increment - decrement;
+		Source_Register(SSS, REGISTER) += (increment - decrement)*2;
+
 	}
 #ifdef DEBUG
 	printf("\n function Ended \n");
